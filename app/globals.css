@@ -5,3 +5,15 @@
 html, body {
     color-scheme: light dark;
 }
+
+h1 {
+    @apply text-3xl text-teal-500 font-bold;
+}
+
+h2 {
+    @apply text-teal-500 text-2xl font-bold;
+}
+
+h3 {
+    @apply text-teal-700 text-xl font-bold;
+}

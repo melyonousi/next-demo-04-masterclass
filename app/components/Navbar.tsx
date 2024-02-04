@@ -5,7 +5,9 @@ const Navbar = () => {
     return (
         <Container>
             <nav className="flex justify-between items-center gap-4">
-                <h1 className="flex-grow py-5">Master Class</h1>
+                <div className="flex items-center gap-1">
+                    <h1 className="flex-grow py-5">Master Class</h1>
+                </div>
                 <ul className="flex items-center gap-4">
                     <li>
                         <Link className="py-5 inline-flex" href={'/'}>Dashboard</Link>
