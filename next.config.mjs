@@ -9,6 +9,10 @@ const nextConfig = {
             {
                 protocol: "https",
                 hostname: "via.placeholder.com",
+            },
+            {
+                protocol: 'https',
+                hostname: 'nextjs-demo-04-master-class.s3.eu-west-2.amazonaws.com'
             }
         ]
     }

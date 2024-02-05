@@ -1,7 +1,10 @@
+import { TUser } from "./User"
+
 export type TTicket = {
-    id: number
+    id: string
     title: string
     body: string
     priority: string
-    user_id: number
+    user_id?: string
+    user: TUser
 }

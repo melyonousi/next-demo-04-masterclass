@@ -1,7 +1,8 @@
 import Link from "next/link"
 import Container from "./components/Container"
 
-const Home = () => {
+const Home = async () => {
+
   return (
     <main>
       <Container className={'py-5'}>
