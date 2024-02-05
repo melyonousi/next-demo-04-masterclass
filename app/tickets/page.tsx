@@ -4,7 +4,7 @@ import { TTicket } from '../models/Ticket'
 import Ticket from '../components/Ticket'
 
 const fetchTickets = async () => {
-  const res = await fetch(process.env.BASE_API + '/tickets', {
+  const res = await fetch(process.env.NEXT_PUBLIC_BASE_API + '/tickets', {
     next: {
       revalidate: 0,
     }
