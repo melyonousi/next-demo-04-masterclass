@@ -1,11 +1,10 @@
-import { NextApiRequest, NextApiResponse } from 'next'
 import { NextRequest, NextResponse } from 'next/server'
 import { openDatabase } from '@/db/database'
 import { Table } from '@/app/enum/tables'
 import bcrypt from 'bcrypt'
 import { TUser } from '@/app/models/User'
 
-export const GET = async (req: NextApiRequest, res: NextApiResponse) => {
+export const GET = async (req: NextRequest, res: NextResponse) => {
   const db = await openDatabase()
 
   try {
@@ -18,7 +17,7 @@ export const GET = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 }
 
-export const POST = async (req: NextRequest) => {
+export const POST = async (req: NextRequest, res: NextResponse) => {
   const db = await openDatabase()
 
   try {
@@ -32,7 +31,7 @@ export const POST = async (req: NextRequest) => {
     // }))
     const user: TUser = await req.json()
     const salt = await bcrypt.genSalt(10)
-    const hash = await bcrypt.hash(user.password, salt)
+    const hash = await bcrypt.hash(user.password ?? 'pass123', salt)
     const insert = await db.run(`INSERT INTO ${Table.USERS} (name, email, password) VALUES (?, ?, ?)`, [user.name, user.email, hash])
     const _user: TUser | undefined = await db.get(`SELECT name, email FROM ${Table.USERS} where id = ?`, insert.lastID)
     await db.close()

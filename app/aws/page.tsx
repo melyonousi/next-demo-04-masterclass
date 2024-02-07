@@ -18,7 +18,7 @@ const AWS = () => {
             const formData = new FormData()
             formData.set('file', file)
 
-            const res = await fetch(process.env.NEXT_PUBLIC_BASE_API + '/aws', {
+            const res = await fetch('/api/aws', {
                 method: 'PUT',
                 body: formData
             })

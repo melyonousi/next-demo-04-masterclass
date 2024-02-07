@@ -16,7 +16,7 @@ export const GET = async (request: NextRequest, { params }: { params: { id: stri
 
     if (!select) {
         await db.close()
-        return NextResponse.json({error: 'ticket not found'})
+        return NextResponse.json({ error: 'ticket not found', ok: false }, { status: 404 })
     }
 
     const ticket: TTicket = {
@@ -48,6 +48,6 @@ export const DELETE = async (request: NextRequest, { params }: { params: { id: s
     }
 
     await db.close()
-    return NextResponse.json({ error: 'ticket not found' })
+    return NextResponse.json({ error: 'ticket not found', ok: false }, { status: 404 })
 
 }

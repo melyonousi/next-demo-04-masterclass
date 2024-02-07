@@ -6,5 +6,6 @@ export type TTicket = {
     body: string
     priority: string
     user_id?: string
-    user: TUser
+    user_email?: string
+    user?: TUser
 }

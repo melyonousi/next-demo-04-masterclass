@@ -2,10 +2,9 @@ import { Priority } from "@/app/enum/priority"
 import { Table } from "@/app/enum/tables"
 import { TTicket } from "@/app/models/Ticket"
 import { openDatabase } from "@/db/database"
-import { NextApiRequest } from "next"
 import { NextRequest, NextResponse } from "next/server"
 
-export const GET = async (request: NextApiRequest) => {
+export const GET = async (request: NextRequest) => {
     const db = await openDatabase()
     try {
         const tickets: Array<TTicket> = await db.all(`SELECT * FROM ${Table.TICKETS}`)
@@ -19,14 +18,18 @@ export const GET = async (request: NextApiRequest) => {
 
 export const POST = async (request: NextRequest) => {
     const ticket: TTicket = await request.json()
+    const error: any = {}
     if (!ticket.title) {
-        return NextResponse.json({ error: 'title required' })
+        error['title'] = 'title required'
     }
     if (!ticket.body) {
-        return NextResponse.json({ error: 'body required' })
+        error['body'] = 'body required'
     }
     if (!ticket.user_id) {
-        return NextResponse.json({ error: 'user id required' })
+        error['user_id'] = 'user id required'
+    }
+    if (Object.keys(error).length !== 0) {
+        return NextResponse.json({ errors: error, message: 'something went wrong', ok: false }, { status: 400 })
     }
 
     const db = await openDatabase()
@@ -40,10 +43,10 @@ export const POST = async (request: NextRequest) => {
         const insert = await db.run(`INSERT INTO ${Table.TICKETS} (title, body, priority, user_id) VALUES (?, ?, ?, ?)`, [ticket.title, ticket.body, ticket.priority ?? Priority.MEDIUM, ticket.user_id]);
         const _ticket: TTicket | undefined = await db.get(`SELECT * FROM ${Table.TICKETS} where id = (?)`, [insert.lastID]);
         await db.close()
-        return NextResponse.json({ ticket: _ticket })
+        return NextResponse.json({ message: 'created with success', ticket: _ticket, ok: true })
     } catch (error: any) {
         await db.close()
-        return NextResponse.json(error.message)
+        return NextResponse.json({ message: error.message, ok: false }, { status: 400 })
     }
 
 }
