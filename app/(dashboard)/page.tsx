@@ -1,5 +1,5 @@
 import Link from "next/link"
-import Container from "./components/Container"
+import Container from "@/app/components/Container"
 
 const Home = async () => {
 

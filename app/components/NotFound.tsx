@@ -1,6 +1,11 @@
 import React from 'react'
 import Link from 'next/link'
 import Container from './Container'
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Master Class | Not Found"
+};
 
 const NotFound = ({ title, description, url, urlName }: { title?: string, description?: string, url?: string, urlName?: string }) => {
     return (

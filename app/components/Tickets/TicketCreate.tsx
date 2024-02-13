@@ -35,7 +35,7 @@ const TicketCreate = () => {
     e.preventDefault()
     setLoading(true)
     try {
-      const res = await fetch(process.env.NEXT_PUBLIC_BASE_API + '/tickets', {
+      const res = await fetch('/api/tickets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(state)

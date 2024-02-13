@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Cairo, Inter } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
-import Navbar from "./components/Navbar";
 
 const cairo = Cairo({ subsets: ["arabic"] });
 
@@ -17,9 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" dir="ltr">
-      <body className={cairo.className}>
-        <Navbar />
+    <html lang="en" dir="ltr" suppressHydrationWarning={true}>
+      <body className={cairo.className} suppressHydrationWarning={true}>
         {children}
       </body>
     </html>

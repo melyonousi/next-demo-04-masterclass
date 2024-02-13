@@ -1,17 +1,29 @@
 import Container from "@/app/components/Container"
 import { Priority } from "@/app/enum/priority"
-import Loading from "@/app/loading"
+import Loading from "@/app/(dashboard)/loading"
 import { TTicket } from "@/app/models/Ticket"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
+import { Metadata } from "next"
+
+type Props = {
+    params: { id: string }
+}
 
 export const dynamicParams = true
+
+export async function generateMetadata({ params }: Props) {
+    const { id } = params
+    const res = await fetch(process.env.BASE_API + '/tickets/' + id)
+    const ticket = await res.json()
+    return { title: `Master Class | ${ticket.title}` }
+}
 
 export async function generateStaticParams() {
     const res = await fetch(process.env.BASE_API + '/tickets')
     const tickets: Array<TTicket> = await res.json()
     return tickets.map((ticket: TTicket) => ({
-        id: ticket.id
+        id: `${ticket.id}`
     }))
 }
 
@@ -27,7 +39,7 @@ const fetchTicket = async (id: string) => {
     return res.json()
 }
 
-const Ticket = async ({ params }: { params: { id: string } }) => {
+const Ticket = async ({ params }: Props) => {
     const ticket: TTicket = await fetchTicket(params.id)
 
     return (
@@ -38,7 +50,10 @@ const Ticket = async ({ params }: { params: { id: string } }) => {
                     ticket ? (
                         <div className='bg-zinc-800 rounded flex flex-col gap-0.5 pt-4 ps-4'>
                             <p className='text-2xl font-bold'>{ticket?.title}</p>
-                            <p className='text-lg'>Created by <strong>{ticket?.user?.name}</strong></p>
+                            {
+                                ticket?.user && <p className='text-lg'>Created by <strong>{ticket?.user?.name}</strong></p>
+                            }
+
                             {
                                 ticket.user_email && <p className='text-lg'>Created by <strong>{ticket?.user_email}</strong></p>
                             }

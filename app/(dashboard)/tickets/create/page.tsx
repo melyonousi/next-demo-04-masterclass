@@ -1,6 +1,11 @@
 import Container from "@/app/components/Container"
 import TicketCreate from "@/app/components/Tickets/TicketCreate"
+import { Metadata } from "next";
 import Link from "next/link"
+
+export const metadata: Metadata = {
+  title: "Master Class | Add Ticket"
+};
 
 const CreateTicket = () => {
   return (

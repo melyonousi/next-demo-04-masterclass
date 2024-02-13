@@ -1,9 +1,14 @@
 import React, { Suspense } from 'react'
-import Container from '../components/Container'
-import { TTicket } from '../models/Ticket'
-import Ticket from '../components/Tickets/Ticket'
-import Loading from '@/app/loading'
+import Loading from '@/app/(dashboard)/loading'
 import Link from 'next/link'
+import Ticket from '@/app/components/Tickets/Ticket'
+import { TTicket } from '@/app/models/Ticket'
+import Container from '@/app/components/Container'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: "Master Class | Tickets"
+};
 
 const fetchTickets = async () => {
   const res = await fetch(process.env.BASE_API + '/tickets',

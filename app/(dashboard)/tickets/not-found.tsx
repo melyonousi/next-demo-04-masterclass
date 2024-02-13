@@ -1,7 +1,5 @@
+import NotFound from '@/app/components/NotFound'
 import React from 'react'
-import Link from 'next/link'
-import Container from '../components/Container'
-import NotFound from '../components/NotFound'
 
 const notFound = () => {
   return <NotFound
