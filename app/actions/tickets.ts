@@ -9,8 +9,7 @@ import { redirect } from "next/navigation"
 export const addTicket = async (formData: any) => {
     const supabase = createServerActionClient({ cookies })
     const { data: session } = await supabase.auth.getSession()
-    const ticket: TTicket = {
-        id: '',
+    const ticket = {
         title: formData.get('title'),
         body: formData.get('body',),
         priority: formData.get('priority'),
