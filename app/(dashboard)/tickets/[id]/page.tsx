@@ -56,10 +56,6 @@ const Ticket = async ({ params }: Props) => {
                         <div className='bg-zinc-800 rounded flex flex-col gap-0.5 pt-4 ps-4'>
                             <p className='text-2xl font-bold'>{ticket?.title}</p>
                             {
-                                ticket?.user && <p className='text-lg'>Created by <strong>{ticket?.user?.name}</strong></p>
-                            }
-
-                            {
                                 ticket.user_email && <p className='text-lg'>Created by <strong>{ticket?.user_email}</strong></p>
                             }
                             <p>{ticket?.body}</p>

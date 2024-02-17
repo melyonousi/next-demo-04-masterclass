@@ -10,6 +10,7 @@ export const addTicket = async (formData: any) => {
     const supabase = createServerActionClient({ cookies })
     const { data: session } = await supabase.auth.getSession()
     const ticket: TTicket = {
+        id: '',
         title: formData.get('title'),
         body: formData.get('body',),
         priority: formData.get('priority'),
