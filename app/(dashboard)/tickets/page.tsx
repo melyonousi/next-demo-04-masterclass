@@ -5,24 +5,30 @@ import Ticket from '@/app/components/Tickets/Ticket'
 import { TTicket } from '@/app/models/Ticket'
 import Container from '@/app/components/Container'
 import { Metadata } from 'next'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation";
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: "Master Class | Tickets"
 };
 
-const fetchTickets = async () => {
-  const res = await fetch(process.env.BASE_API + '/tickets',
-    {
-      next: {
-        revalidate: 0,
-      }
-    }
-  )
-  return res.json()
-}
-
 const Tickets = async () => {
-  const tickets: Array<TTicket> = await fetchTickets()
+  const supabase = createServerComponentClient({ cookies })
+  const { data: session } = await supabase.auth.getSession()
+
+  if (!session.session) {
+    redirect('/signin')
+  }
+
+  const { data, error } = await supabase.from('Tickets').select().returns<TTicket[]>()
+  
+  if (error) {
+    console.log(error)
+  }
+
   return (
     <Container>
       <h2>Tickets</h2>
@@ -33,12 +39,15 @@ const Tickets = async () => {
       <div className='flex flex-col gap-2 mt-5'>
         <Suspense fallback={<Loading />}>
           {
-            tickets.map((ticket: TTicket) => (
+            data?.map((ticket: TTicket) => (
               <Ticket key={ticket.id} ticket={ticket} />
             ))
           }
           {
-            tickets.length <= 0 && <p>no tickets found</p>
+            !data && <p>no tickets found</p>
+          }
+          {
+            data?.length == 0 && <p>no tickets found</p>
           }
         </Suspense>
       </div>

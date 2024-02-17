@@ -1,9 +1,14 @@
 import Link from "next/link"
 import Container from "./Container"
-import useServerSession from "@/config/useServerSession"
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from "next/headers"
+
+export const dynamic = 'force-dynamic'
 
 const Navbar = async () => {
-    const user = await useServerSession()
+    const supabase = createServerComponentClient({ cookies })
+    const { data } = await supabase.auth.getSession()
+
     return (
         <Container>
             <nav className="flex justify-between items-center gap-4">
@@ -23,14 +28,14 @@ const Navbar = async () => {
                         <Link className="py-5 inline-flex" href={'/about'}>About</Link>
                     </li>
                     {
-                        user && (
+                        data.session?.user && (
                             <li className="bg-teal-500 rounded-full size-7 flex justify-center items-center">
-                                <Link className="inline-flex " href={'/profile'}>{user?.user.user_metadata?.name.substring(0, 2)}</Link>
+                                <Link className="inline-flex " href={'/profile'}>{data.session?.user.user_metadata?.name.substring(0, 2)}</Link>
                             </li>
                         )
                     }
                     {
-                        !user && (
+                        !data.session?.user && (
                             <>
                                 <li>
                                     <Link className="py-5 inline-flex" href={'/signup'}>Sign up</Link>

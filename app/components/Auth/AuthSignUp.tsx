@@ -52,7 +52,6 @@ const AuthSignUp = () => {
     if (error) {
       setMessage(error?.message)
     } else {
-      console.log(data)
       router.push('/verify')
     }
     setLoading(false)

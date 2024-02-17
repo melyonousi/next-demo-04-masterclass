@@ -4,7 +4,11 @@ import Loading from "@/app/(dashboard)/loading"
 import { TTicket } from "@/app/models/Ticket"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
-import { Metadata } from "next"
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
+import { cookies } from 'next/headers'
+import TicketDelete from "@/app/components/Tickets/TicketDelete"
+
+export const dynamic = 'force-dynamic'
 
 type Props = {
     params: { id: string }
@@ -14,37 +18,38 @@ export const dynamicParams = true
 
 export async function generateMetadata({ params }: Props) {
     const { id } = params
-    const res = await fetch(process.env.BASE_API + '/tickets/' + id)
-    const ticket = await res.json()
-    return { title: `Master Class | ${ticket.title}` }
-}
 
-export async function generateStaticParams() {
-    const res = await fetch(process.env.BASE_API + '/tickets')
-    const tickets: Array<TTicket> = await res.json()
-    return tickets.map((ticket: TTicket) => ({
-        id: `${ticket.id}`
-    }))
-}
+    const supabase = createServerComponentClient({ cookies })
+    const { data } = await supabase.from('Tickets').select().eq('id', id).single()
 
-const fetchTicket = async (id: string) => {
-    const res = await fetch(process.env.BASE_API + '/tickets/' + id, {
-        next: {
-            revalidate: 60
-        }
-    })
-    if (!res.ok) {
-        notFound()
-    }
-    return res.json()
+    return { title: `Master Class | ${data?.title || 'Ticket not found'}` }
 }
 
 const Ticket = async ({ params }: Props) => {
-    const ticket: TTicket = await fetchTicket(params.id)
+    const supabase = createServerComponentClient({ cookies })
+
+    const { data: session } = await supabase.auth.getSession()
+
+    const { data } = await supabase.from('Tickets')
+        .select()
+        .eq('id', params.id)
+        .single()
+        
+    if (!data) {
+        notFound()
+    }
+    const ticket: TTicket = data
 
     return (
-        <Container>
-            <h3 className="mb-3">Ticket details</h3>
+        <Container className="flex flex-col gap-10">
+            <div className="flex justify-between gap-10">
+                <h3 className="mb-3">Ticket details</h3>
+                {
+                    session.session?.user.id === ticket.user_id && (
+                        <TicketDelete id={ticket.id} />
+                    )
+                }
+            </div>
             <Suspense fallback={<Loading />}>
                 {
                     ticket ? (

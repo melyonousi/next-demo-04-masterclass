@@ -16,8 +16,8 @@ const AuthSignOut = () => {
             router.refresh()
             console.log(error.message)
         } else {
-            router.refresh()
             router.push('/')
+            router.refresh()
         }
     }
     return <button

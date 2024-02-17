@@ -5,6 +5,8 @@ import { PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { NextRequest, NextResponse } from 'next/server'
 
+export const dynamic = 'force-dynamic'
+
 const getUrl = async (path: string) => {
     const getObjectCommand = new GetObjectCommand({
         Bucket: process.env.AWS_BUCKET_NAME,

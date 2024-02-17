@@ -6,7 +6,8 @@ export const metadata: Metadata = {
   title: "Master Class | Sign in"
 };
 
-const SignIn = () => {
+const SignIn = async () => {
+  
   return (
     <Container>
       <h3>Sign in</h3>
